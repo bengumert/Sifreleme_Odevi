@@ -21,8 +21,31 @@ namespace MainForm
 
         private void SetupInitialUI()
         {
+            // Listeye eklenecek tüm algoritmalar
+            string[] algoritmalar = {
+        "Kaydırmalı",
+        "Doğrusal",
+        "Yer Değiştirme",
+        "Sayı Anahtarlı",
+        "Permütasyon",
+        "Rota",
+        "Zigzag",
+        "4 Kare",
+        "Hill"
+    };
+
+            // Şifreleme kısmındaki listeyi doldur
+            cmbAlgoritma.Items.Clear();
+            cmbAlgoritma.Items.AddRange(algoritmalar);
+
+            // Çözme kısmındaki listeyi doldur
+            cmbCozAlgoritma.Items.Clear();
+            cmbCozAlgoritma.Items.AddRange(algoritmalar);
+
+            // İlk sıradakini seçili getir
             cmbAlgoritma.SelectedIndex = 0;
             cmbCozAlgoritma.SelectedIndex = 0;
+
             UpdateKeyHint();
         }
 
@@ -94,6 +117,8 @@ namespace MainForm
                     "Permütasyon" => CryptoAlgorithms.PermutationEncrypt(text, key),
                     "Rota" => CryptoAlgorithms.RouteEncrypt(text, key),
                     "Zigzag" => CryptoAlgorithms.RailFenceEncrypt(text, key),
+                    "4 Kare" => CryptoAlgorithms.FourSquareEncrypt(text, key), // EKLEDİK
+                    "Hill" => CryptoAlgorithms.HillEncrypt(text, key),         // EKLEDİK
                     _ => "Algoritma seçilmedi."
                 } : algorithm switch
                 {
@@ -104,6 +129,8 @@ namespace MainForm
                     "Permütasyon" => CryptoAlgorithms.PermutationDecrypt(text, key),
                     "Rota" => CryptoAlgorithms.RouteDecrypt(text, key),
                     "Zigzag" => CryptoAlgorithms.RailFenceDecrypt(text, key),
+                    "4 Kare" => CryptoAlgorithms.FourSquareDecrypt(text, key), // EKLEDİK
+                    "Hill" => CryptoAlgorithms.HillDecrypt(text, key),         // EKLEDİK
                     _ => "Algoritma seçilmedi."
                 };
 
@@ -315,6 +342,8 @@ namespace MainForm
                 "Permütasyon" => "Örn: 3,1,0,2",
                 "Rota" => "Satır Sayısı (Örn: 5)",
                 "Zigzag" => "Hat Sayısı (Örn: 3)",
+                "4 Kare" => "İki Anahtar (Örn: ELMA,ARMUT)", 
+                "Hill" => "4 Sayı (Örn: 3,3,2,5)",          
                 _ => ""
             };
 
@@ -325,5 +354,6 @@ namespace MainForm
         private void chkShowPass_CheckedChanged(object sender, EventArgs e)
             => txtKendiSifre.UseSystemPasswordChar = !chkShowPass.Checked;
         #endregion
+
     }
 }

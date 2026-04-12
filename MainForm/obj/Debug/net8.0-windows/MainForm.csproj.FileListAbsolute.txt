@@ -21,3 +21,4 @@ C:\Users\bengü\OneDrive\Desktop\MainForm\MainForm\bin\Debug\net8.0-windows\Syst
 C:\Users\bengü\OneDrive\Desktop\MainForm\MainForm\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\bengü\OneDrive\Desktop\MainForm\MainForm\obj\Debug\net8.0-windows\MainForm.csproj.AssemblyReference.cache
 C:\Users\bengü\OneDrive\Desktop\MainForm\MainForm\obj\Debug\net8.0-windows\MainForm.csproj.Up2Date
+C:\Users\bengü\OneDrive\Desktop\MainForm\MainForm\obj\Debug\net8.0-windows\MainForm.sourcelink.json

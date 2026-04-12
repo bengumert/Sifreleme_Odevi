@@ -57,12 +57,13 @@
             cmbCozAlgoritma = new ComboBox();
             lblCozAlg = new Label();
             pnlCozInputCard = new Panel();
-            lstGelenMesajlar = new ListBox();
             txtGelenSifre = new RichTextBox();
             label5 = new Label();
             btnPostaCek = new Button();
             tabPage3 = new TabPage();
             pnlSettingsCard = new Panel();
+            lblKullaniciAdi = new Label();
+            txtKullaniciAdi = new TextBox();
             btnAyarlariKaydet = new Button();
             chkShowPass = new CheckBox();
             txtKendiSifre = new TextBox();
@@ -70,8 +71,7 @@
             txtKendiMail = new TextBox();
             lblKendiMail = new Label();
             lblAyarInfo = new Label();
-            txtKullaniciAdi = new TextBox();
-            lblKullaniciAdi = new Label();
+            lstGelenMesajlar = new ListBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             pnlMailCard.SuspendLayout();
@@ -141,7 +141,7 @@
             txtAliciMail.AutoSize = true;
             txtAliciMail.Location = new Point(15, 20);
             txtAliciMail.Name = "txtAliciMail";
-            txtAliciMail.Size = new Size(89, 19);
+            txtAliciMail.Size = new Size(91, 19);
             txtAliciMail.TabIndex = 4;
             txtAliciMail.Text = "Alıcı E-Posta:";
             // 
@@ -151,7 +151,7 @@
             btnMailGonder.Cursor = Cursors.Hand;
             btnMailGonder.FlatAppearance.BorderSize = 0;
             btnMailGonder.FlatStyle = FlatStyle.Flat;
-            btnMailGonder.Font = new Font("Segoe UI Bold", 9.75F, FontStyle.Bold);
+            btnMailGonder.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold);
             btnMailGonder.Location = new Point(530, 14);
             btnMailGonder.Name = "btnMailGonder";
             btnMailGonder.Size = new Size(200, 32);
@@ -180,7 +180,7 @@
             lblSifreAnahtarLine.ForeColor = Color.Silver;
             lblSifreAnahtarLine.Location = new Point(240, 15);
             lblSifreAnahtarLine.Name = "lblSifreAnahtarLine";
-            lblSifreAnahtarLine.Size = new Size(107, 15);
+            lblSifreAnahtarLine.Size = new Size(108, 15);
             lblSifreAnahtarLine.TabIndex = 10;
             lblSifreAnahtarLine.Text = "Şifreleme Anahtarı:";
             // 
@@ -200,7 +200,7 @@
             btnSifrele.Cursor = Cursors.Hand;
             btnSifrele.FlatAppearance.BorderSize = 0;
             btnSifrele.FlatStyle = FlatStyle.Flat;
-            btnSifrele.Font = new Font("Segoe UI Bold", 12F, FontStyle.Bold);
+            btnSifrele.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             btnSifrele.Location = new Point(660, 20);
             btnSifrele.Name = "btnSifrele";
             btnSifrele.Size = new Size(270, 45);
@@ -230,7 +230,7 @@
             lblAlgSec.ForeColor = Color.Silver;
             lblAlgSec.Location = new Point(15, 15);
             lblAlgSec.Name = "lblAlgSec";
-            lblAlgSec.Size = new Size(84, 15);
+            lblAlgSec.Size = new Size(85, 15);
             lblAlgSec.TabIndex = 0;
             lblAlgSec.Text = "Algoritma Seç:";
             // 
@@ -262,11 +262,11 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI Bold", 11F, FontStyle.Bold);
+            label2.Font = new Font("Microsoft Sans Serif", 11F, FontStyle.Bold);
             label2.ForeColor = Color.FromArgb(0, 160, 250);
             label2.Location = new Point(12, 12);
             label2.Name = "label2";
-            label2.Size = new Size(153, 20);
+            label2.Size = new Size(163, 18);
             label2.TabIndex = 7;
             label2.Text = "Şifreli Metin (Giden):";
             // 
@@ -297,11 +297,11 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI Bold", 11F, FontStyle.Bold);
+            label4.Font = new Font("Microsoft Sans Serif", 11F, FontStyle.Bold);
             label4.ForeColor = Color.FromArgb(0, 160, 250);
             label4.Location = new Point(12, 12);
             label4.Name = "label4";
-            label4.Size = new Size(135, 20);
+            label4.Size = new Size(146, 18);
             label4.TabIndex = 8;
             label4.Text = "Metin Girişi (Düz):";
             // 
@@ -348,11 +348,11 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI Bold", 11F, FontStyle.Bold);
+            label3.Font = new Font("Microsoft Sans Serif", 11F, FontStyle.Bold);
             label3.ForeColor = Color.FromArgb(250, 160, 0);
             label3.Location = new Point(12, 12);
             label3.Name = "label3";
-            label3.Size = new Size(110, 20);
+            label3.Size = new Size(116, 18);
             label3.TabIndex = 7;
             label3.Text = "Orijinal Mesaj:";
             // 
@@ -386,7 +386,7 @@
             btnCoz.Cursor = Cursors.Hand;
             btnCoz.FlatAppearance.BorderSize = 0;
             btnCoz.FlatStyle = FlatStyle.Flat;
-            btnCoz.Font = new Font("Segoe UI Bold", 12F, FontStyle.Bold);
+            btnCoz.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
             btnCoz.Location = new Point(660, 20);
             btnCoz.Name = "btnCoz";
             btnCoz.Size = new Size(270, 45);
@@ -426,7 +426,7 @@
             lblCozAlg.ForeColor = Color.Silver;
             lblCozAlg.Location = new Point(15, 15);
             lblCozAlg.Name = "lblCozAlg";
-            lblCozAlg.Size = new Size(84, 15);
+            lblCozAlg.Size = new Size(85, 15);
             lblCozAlg.TabIndex = 11;
             lblCozAlg.Text = "Algoritma Seç:";
             // 
@@ -457,11 +457,11 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI Bold", 11F, FontStyle.Bold);
+            label5.Font = new Font("Microsoft Sans Serif", 11F, FontStyle.Bold);
             label5.ForeColor = Color.FromArgb(250, 160, 0);
             label5.Location = new Point(12, 12);
             label5.Name = "label5";
-            label5.Size = new Size(207, 20);
+            label5.Size = new Size(194, 18);
             label5.TabIndex = 8;
             label5.Text = "Gelen Mesajlar ve İçerik:";
             // 
@@ -471,7 +471,7 @@
             btnPostaCek.Cursor = Cursors.Hand;
             btnPostaCek.FlatAppearance.BorderSize = 0;
             btnPostaCek.FlatStyle = FlatStyle.Flat;
-            btnPostaCek.Font = new Font("Segoe UI Bold", 10F, FontStyle.Bold);
+            btnPostaCek.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
             btnPostaCek.Location = new Point(20, 15);
             btnPostaCek.Name = "btnPostaCek";
             btnPostaCek.Size = new Size(250, 40);
@@ -509,6 +509,14 @@
             pnlSettingsCard.Size = new Size(932, 450);
             pnlSettingsCard.TabIndex = 0;
             // 
+            // lblKullaniciAdi
+            // 
+            lblKullaniciAdi.AutoSize = true;
+            lblKullaniciAdi.Location = new Point(40, 75);
+            lblKullaniciAdi.Name = "lblKullaniciAdi";
+            lblKullaniciAdi.Size = new Size(110, 19);
+            lblKullaniciAdi.TabIndex = 8;
+            lblKullaniciAdi.Text = "Görünen Adınız:";
             // 
             // txtKullaniciAdi
             // 
@@ -521,33 +529,34 @@
             txtKullaniciAdi.Size = new Size(500, 25);
             txtKullaniciAdi.TabIndex = 7;
             // 
-            // lblKullaniciAdi
+            // btnAyarlariKaydet
             // 
-            lblKullaniciAdi.AutoSize = true;
-            lblKullaniciAdi.Location = new Point(40, 75);
-            lblKullaniciAdi.Name = "lblKullaniciAdi";
-            lblKullaniciAdi.Size = new Size(111, 19);
-            lblKullaniciAdi.TabIndex = 8;
-            lblKullaniciAdi.Text = "Görünen Adınız:";
+            btnAyarlariKaydet.BackColor = Color.FromArgb(0, 192, 0);
+            btnAyarlariKaydet.Cursor = Cursors.Hand;
+            btnAyarlariKaydet.FlatAppearance.BorderSize = 0;
+            btnAyarlariKaydet.FlatStyle = FlatStyle.Flat;
+            btnAyarlariKaydet.Font = new Font("Microsoft Sans Serif", 11F, FontStyle.Bold);
+            btnAyarlariKaydet.ForeColor = Color.Black;
+            btnAyarlariKaydet.Location = new Point(40, 340);
+            btnAyarlariKaydet.Name = "btnAyarlariKaydet";
+            btnAyarlariKaydet.Size = new Size(250, 45);
+            btnAyarlariKaydet.TabIndex = 6;
+            btnAyarlariKaydet.Text = "💾 AYARLARI KAYDET";
+            btnAyarlariKaydet.UseVisualStyleBackColor = false;
+            btnAyarlariKaydet.Click += btnAyarlariKaydet_Click;
             // 
-            // txtKendiMail
+            // chkShowPass
             // 
-            txtKendiMail.BackColor = Color.FromArgb(45, 45, 45);
-            txtKendiMail.BorderStyle = BorderStyle.FixedSingle;
-            txtKendiMail.ForeColor = Color.White;
-            txtKendiMail.Location = new Point(40, 180);
-            txtKendiMail.Name = "txtKendiMail";
-            txtKendiMail.Size = new Size(500, 25);
-            txtKendiMail.TabIndex = 2;
-            // 
-            // lblKendiMail
-            // 
-            lblKendiMail.AutoSize = true;
-            lblKendiMail.Location = new Point(40, 155);
-            lblKendiMail.Name = "lblKendiMail";
-            lblKendiMail.Size = new Size(144, 19);
-            lblKendiMail.TabIndex = 1;
-            lblKendiMail.Text = "Kendi E-Posta Adresin:";
+            chkShowPass.AutoSize = true;
+            chkShowPass.Font = new Font("Segoe UI", 9F);
+            chkShowPass.ForeColor = Color.Silver;
+            chkShowPass.Location = new Point(40, 295);
+            chkShowPass.Name = "chkShowPass";
+            chkShowPass.Size = new Size(95, 19);
+            chkShowPass.TabIndex = 5;
+            chkShowPass.Text = "Şifreyi Göster";
+            chkShowPass.UseVisualStyleBackColor = true;
+            chkShowPass.CheckedChanged += chkShowPass_CheckedChanged;
             // 
             // txtKendiSifre
             // 
@@ -565,49 +574,46 @@
             lblKendiSifre.AutoSize = true;
             lblKendiSifre.Location = new Point(40, 235);
             lblKendiSifre.Name = "lblKendiSifre";
-            lblKendiSifre.Size = new Size(160, 19);
+            lblKendiSifre.Size = new Size(169, 19);
             lblKendiSifre.TabIndex = 3;
             lblKendiSifre.Text = "Uygulama Şifresi (Gmail):";
             // 
-            // chkShowPass
+            // txtKendiMail
             // 
-            chkShowPass.AutoSize = true;
-            chkShowPass.Font = new Font("Segoe UI", 9F);
-            chkShowPass.ForeColor = Color.Silver;
-            chkShowPass.Location = new Point(40, 295);
-            chkShowPass.Name = "chkShowPass";
-            chkShowPass.Size = new Size(100, 19);
-            chkShowPass.TabIndex = 5;
-            chkShowPass.Text = "Şifreyi Göster";
-            chkShowPass.UseVisualStyleBackColor = true;
-            chkShowPass.CheckedChanged += chkShowPass_CheckedChanged;
+            txtKendiMail.BackColor = Color.FromArgb(45, 45, 45);
+            txtKendiMail.BorderStyle = BorderStyle.FixedSingle;
+            txtKendiMail.ForeColor = Color.White;
+            txtKendiMail.Location = new Point(40, 180);
+            txtKendiMail.Name = "txtKendiMail";
+            txtKendiMail.Size = new Size(500, 25);
+            txtKendiMail.TabIndex = 2;
             // 
-            // btnAyarlariKaydet
+            // lblKendiMail
             // 
-            btnAyarlariKaydet.BackColor = Color.FromArgb(0, 192, 0);
-            btnAyarlariKaydet.Cursor = Cursors.Hand;
-            btnAyarlariKaydet.FlatAppearance.BorderSize = 0;
-            btnAyarlariKaydet.FlatStyle = FlatStyle.Flat;
-            btnAyarlariKaydet.Font = new Font("Segoe UI Bold", 11F, FontStyle.Bold);
-            btnAyarlariKaydet.ForeColor = Color.Black;
-            btnAyarlariKaydet.Location = new Point(40, 340);
-            btnAyarlariKaydet.Name = "btnAyarlariKaydet";
-            btnAyarlariKaydet.Size = new Size(250, 45);
-            btnAyarlariKaydet.TabIndex = 6;
-            btnAyarlariKaydet.Text = "💾 AYARLARI KAYDET";
-            btnAyarlariKaydet.UseVisualStyleBackColor = false;
-            btnAyarlariKaydet.Click += btnAyarlariKaydet_Click;
+            lblKendiMail.AutoSize = true;
+            lblKendiMail.Location = new Point(40, 155);
+            lblKendiMail.Name = "lblKendiMail";
+            lblKendiMail.Size = new Size(150, 19);
+            lblKendiMail.TabIndex = 1;
+            lblKendiMail.Text = "Kendi E-Posta Adresin:";
             // 
             // lblAyarInfo
             // 
             lblAyarInfo.AutoSize = true;
-            lblAyarInfo.Font = new Font("Segoe UI Bold", 14F, FontStyle.Bold);
+            lblAyarInfo.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold);
             lblAyarInfo.ForeColor = Color.FromArgb(0, 160, 250);
             lblAyarInfo.Location = new Point(40, 40);
             lblAyarInfo.Name = "lblAyarInfo";
-            lblAyarInfo.Size = new Size(244, 25);
+            lblAyarInfo.Size = new Size(283, 24);
             lblAyarInfo.TabIndex = 0;
             lblAyarInfo.Text = "⚙ E-POSTA YAPILANDIRMA";
+            // 
+            // lstGelenMesajlar
+            // 
+            lstGelenMesajlar.Location = new Point(0, 0);
+            lstGelenMesajlar.Name = "lstGelenMesajlar";
+            lstGelenMesajlar.Size = new Size(120, 96);
+            lstGelenMesajlar.TabIndex = 0;
             // 
             // Form1
             // 
@@ -616,7 +622,7 @@
             BackColor = Color.FromArgb(15, 15, 15);
             ClientSize = new Size(1000, 800);
             Controls.Add(tabControl1);
-            Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point);
+            Font = new Font("Segoe UI", 9.75F);
             ForeColor = Color.White;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;

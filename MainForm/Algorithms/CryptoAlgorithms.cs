@@ -365,5 +365,127 @@ namespace MainForm.Algorithms
             return new string(result);
         }
         #endregion
+        #region 8. 4 Kare (Four-Square)
+        // Bu algoritma iki farklı anahtar kelime gerektirir: "ANAHTAR1,ANAHTAR2" formatında
+        public static string FourSquareEncrypt(string text, string key)
+        {
+            text = CleanInput(text);
+            if (text.Length % 2 != 0) text += "X";
+
+            string key1 = "ANAHTAR";
+            string key2 = "BILGI";
+            var parts = key.Split(',');
+            if (parts.Length == 2) { key1 = CleanInput(parts[0]); key2 = CleanInput(parts[1]); }
+
+            string square1 = CreateSquare(key1);
+            string square2 = CreateSquare(key2);
+            string normalSquare = AlphabetTR; // 29 karakterli olduğu için doğrudan alfabe
+
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < text.Length; i += 2)
+            {
+                char a = text[i];
+                char b = text[i + 1];
+
+                int r1 = AlphabetTR.IndexOf(a) / 5; // Not: 29 karakter 5x6'lık matris gerektirir
+                int c1 = AlphabetTR.IndexOf(a) % 5;
+                int r2 = AlphabetTR.IndexOf(b) / 5;
+                int c2 = AlphabetTR.IndexOf(b) % 5;
+
+                // 4 Kare mantığı: (r1, c2) ve (r2, c1) çapraz eşleşme
+                // r1,c2 -> square1 | r2,c1 -> square2
+                result.Append(square1[Mod(r1 * 5 + c2, 29)]);
+                result.Append(square2[Mod(r2 * 5 + c1, 29)]);
+            }
+            return result.ToString();
+        }
+
+        private static string CreateSquare(string key)
+        {
+            string combined = key + AlphabetTR;
+            return new string(combined.Distinct().ToArray());
+        }
+
+        public static string FourSquareDecrypt(string text, string key)
+        {
+            text = CleanInput(text);
+            string key1 = "ANAHTAR";
+            string key2 = "BILGI";
+            var parts = key.Split(',');
+            if (parts.Length == 2) { key1 = CleanInput(parts[0]); key2 = CleanInput(parts[1]); }
+
+            string square1 = CreateSquare(key1);
+            string square2 = CreateSquare(key2);
+
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < text.Length; i += 2)
+            {
+                int r1 = square1.IndexOf(text[i]) / 5;
+                int c2 = square1.IndexOf(text[i]) % 5;
+                int r2 = square2.IndexOf(text[i + 1]) / 5;
+                int c1 = square2.IndexOf(text[i + 1]) % 5;
+
+                result.Append(AlphabetTR[Mod(r1 * 5 + c1, 29)]);
+                result.Append(AlphabetTR[Mod(r2 * 5 + c2, 29)]);
+            }
+            return result.ToString();
+        }
+        #endregion
+
+        #region 9. Hill Şifreleme (2x2 Matris)
+        // Key formatı: "a,b,c,d" (Örn: "3,3,2,5") -> |a b|
+        //                                            |c d|
+        public static string HillEncrypt(string text, string key)
+        {
+            text = CleanInput(text);
+            if (text.Length % 2 != 0) text += "X";
+
+            int[] k = key.Split(',').Select(int.Parse).ToArray();
+            if (k.Length < 4) k = new int[] { 3, 3, 2, 5 };
+
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < text.Length; i += 2)
+            {
+                int p1 = GetIndex(text[i]);
+                int p2 = GetIndex(text[i + 1]);
+
+                result.Append(GetChar((k[0] * p1 + k[1] * p2) % 29));
+                result.Append(GetChar((k[2] * p1 + k[3] * p2) % 29));
+            }
+            return result.ToString();
+        }
+
+        public static string HillDecrypt(string text, string key)
+        {
+            text = CleanInput(text);
+            int[] k = key.Split(',').Select(int.Parse).ToArray();
+            if (k.Length < 4) k = new int[] { 3, 3, 2, 5 };
+
+            // Determinant: (ad - bc)
+            int det = Mod(k[0] * k[3] - k[1] * k[2], 29);
+            int invDet = ModInverse(det, 29);
+
+            if (invDet == -1) return "HATA: MATRISIN TERSI YOK (DET=0 VEYA ORTAK BOLEN VAR)";
+
+            // Ters Matris: invDet * | d  -b|
+            //                      |-c   a|
+            int[] invK = new int[4];
+            invK[0] = Mod(invDet * k[3], 29);
+            invK[1] = Mod(invDet * -k[1], 29);
+            invK[2] = Mod(invDet * -k[2], 29);
+            invK[3] = Mod(invDet * k[0], 29);
+
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < text.Length; i += 2)
+            {
+                int c1 = GetIndex(text[i]);
+                int c2 = GetIndex(text[i + 1]);
+
+                result.Append(GetChar((invK[0] * c1 + invK[1] * c2) % 29));
+                result.Append(GetChar((invK[2] * c1 + invK[3] * c2) % 29));
+            }
+            return result.ToString();
+        }
+        #endregion
     }
 }
