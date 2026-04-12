@@ -272,12 +272,12 @@ namespace MainForm.Algorithms
         }
         #endregion
 
-        #region 6. Rota (Route Transposition)
-        public static string RouteEncrypt(string text, string key)
+        #region Sayı Anahtarlı (Columnar Transposition)
+        public static string NumericKeyEncrypt(string text, string key)
         {
             text = CleanInput(text);
-            if (!int.TryParse(key, out int rows) || rows <= 0) rows = 3;
-            int cols = (int)Math.Ceiling((double)text.Length / rows);
+            if (!int.TryParse(key, out int cols) || cols <= 0) cols = 3;
+            int rows = (int)Math.Ceiling((double)text.Length / cols);
             char[,] matrix = new char[rows, cols];
             
             int k = 0;
@@ -293,6 +293,66 @@ namespace MainForm.Algorithms
             return result.ToString();
         }
 
+        public static string NumericKeyDecrypt(string text, string key)
+        {
+            text = text.ToUpper(System.Globalization.CultureInfo.GetCultureInfo("tr-TR")).Replace(" ", "");
+            if (!int.TryParse(key, out int cols) || cols <= 0) cols = 3;
+            int rows = (int)Math.Ceiling((double)text.Length / cols);
+            char[,] matrix = new char[rows, cols];
+
+            int k = 0;
+            for (int c = 0; c < cols; c++)
+                for (int r = 0; r < rows; r++)
+                    if (k < text.Length) matrix[r, c] = text[k++];
+
+            StringBuilder result = new StringBuilder();
+            for (int r = 0; r < rows; r++)
+                for (int c = 0; c < cols; c++)
+                    result.Append(matrix[r, c]);
+
+            return result.ToString().Replace("X", "");
+        }
+        #endregion
+
+        #region 6. Rota (Route Transposition)
+        public static string RouteEncrypt(string text, string key)
+        {
+            text = CleanInput(text);
+            if (!int.TryParse(key, out int rows) || rows <= 0) rows = 3;
+            int cols = (int)Math.Ceiling((double)text.Length / rows);
+            char[,] matrix = new char[rows, cols];
+            
+            int k = 0;
+            for (int r = 0; r < rows; r++)
+                for (int c = 0; c < cols; c++)
+                    matrix[r, c] = k < text.Length ? text[k++] : 'X';
+
+            StringBuilder result = new StringBuilder();
+            int top = 0, bottom = rows - 1, left = 0, right = cols - 1;
+            while (top <= bottom && left <= right)
+            {
+                for (int i = bottom; i >= top; i--) result.Append(matrix[i, left]);
+                left++;
+
+                for (int i = left; i <= right; i++) result.Append(matrix[top, i]);
+                top++;
+
+                if (left <= right)
+                {
+                    for (int i = top; i <= bottom; i++) result.Append(matrix[i, right]);
+                    right--;
+                }
+
+                if (top <= bottom)
+                {
+                    for (int i = right; i >= left; i--) result.Append(matrix[bottom, i]);
+                    bottom--;
+                }
+            }
+
+            return result.ToString();
+        }
+
         public static string RouteDecrypt(string text, string key)
         {
             text = text.ToUpper(System.Globalization.CultureInfo.GetCultureInfo("tr-TR")).Replace(" ", "");
@@ -300,10 +360,28 @@ namespace MainForm.Algorithms
             int cols = (int)Math.Ceiling((double)text.Length / rows);
             char[,] matrix = new char[rows, cols];
 
+            int top = 0, bottom = rows - 1, left = 0, right = cols - 1;
             int k = 0;
-            for (int c = 0; c < cols; c++)
-                for (int r = 0; r < rows; r++)
-                    if (k < text.Length) matrix[r, c] = text[k++];
+            while (top <= bottom && left <= right && k < text.Length)
+            {
+                for (int i = bottom; i >= top; i--) if (k < text.Length) matrix[i, left] = text[k++];
+                left++;
+
+                for (int i = left; i <= right; i++) if (k < text.Length) matrix[top, i] = text[k++];
+                top++;
+
+                if (left <= right)
+                {
+                    for (int i = top; i <= bottom; i++) if (k < text.Length) matrix[i, right] = text[k++];
+                    right--;
+                }
+
+                if (top <= bottom)
+                {
+                    for (int i = right; i >= left; i--) if (k < text.Length) matrix[bottom, i] = text[k++];
+                    bottom--;
+                }
+            }
 
             StringBuilder result = new StringBuilder();
             for (int r = 0; r < rows; r++)
@@ -370,16 +448,15 @@ namespace MainForm.Algorithms
         public static string FourSquareEncrypt(string text, string key)
         {
             text = CleanInput(text);
-            if (text.Length % 2 != 0) text += "X";
+            if (text.Length % 2 != 0) text += "X"; // Tek sayılıysa doldur
 
-            string key1 = "ANAHTAR";
-            string key2 = "BILGI";
-            var parts = key.Split(',');
-            if (parts.Length == 2) { key1 = CleanInput(parts[0]); key2 = CleanInput(parts[1]); }
+            string key1 = CleanInput(key);
+            if (string.IsNullOrWhiteSpace(key1)) key1 = "ANAHTAR";
+            string key2 = new string(key1.Reverse().ToArray()); // Çift kelime yerine aynı anahtarın tersini kullanıyoruz
 
-            string square1 = CreateSquare(key1);
-            string square2 = CreateSquare(key2);
-            string normalSquare = AlphabetTR; // 29 karakterli olduğu için doğrudan alfabe
+            string normalSquare = AlphabetTR + "X"; // 30 karakter, 5x6 matris için
+            string square1 = CreateSquare(key1);    // M2 (Sağ Üst)
+            string square2 = CreateSquare(key2);    // M3 (Sol Alt)
 
             StringBuilder result = new StringBuilder();
             for (int i = 0; i < text.Length; i += 2)
@@ -387,48 +464,63 @@ namespace MainForm.Algorithms
                 char a = text[i];
                 char b = text[i + 1];
 
-                int r1 = AlphabetTR.IndexOf(a) / 5; // Not: 29 karakter 5x6'lık matris gerektirir
-                int c1 = AlphabetTR.IndexOf(a) % 5;
-                int r2 = AlphabetTR.IndexOf(b) / 5;
-                int c2 = AlphabetTR.IndexOf(b) % 5;
+                int indexA = normalSquare.IndexOf(a);
+                int indexB = normalSquare.IndexOf(b);
+                if (indexA == -1) indexA = 29;
+                if (indexB == -1) indexB = 29;
 
-                // 4 Kare mantığı: (r1, c2) ve (r2, c1) çapraz eşleşme
-                // r1,c2 -> square1 | r2,c1 -> square2
-                result.Append(square1[Mod(r1 * 5 + c2, 29)]);
-                result.Append(square2[Mod(r2 * 5 + c1, 29)]);
+                int r1 = indexA / 6; // M1 satır
+                int c1 = indexA % 6; // M1 sütun
+                int r2 = indexB / 6; // M4 satır
+                int c2 = indexB % 6; // M4 sütun
+
+                // Kesişim: r1,c2 -> M2 (Sağ Üst), r2,c1 -> M3 (Sol Alt)
+                result.Append(square1[r1 * 6 + c2]);
+                result.Append(square2[r2 * 6 + c1]);
             }
             return result.ToString();
         }
 
         private static string CreateSquare(string key)
         {
-            string combined = key + AlphabetTR;
+            string combined = key + AlphabetTR + "X";
             return new string(combined.Distinct().ToArray());
         }
 
         public static string FourSquareDecrypt(string text, string key)
         {
             text = CleanInput(text);
-            string key1 = "ANAHTAR";
-            string key2 = "BILGI";
-            var parts = key.Split(',');
-            if (parts.Length == 2) { key1 = CleanInput(parts[0]); key2 = CleanInput(parts[1]); }
+            if (text.Length % 2 != 0) text += "X";
 
-            string square1 = CreateSquare(key1);
-            string square2 = CreateSquare(key2);
+            string key1 = CleanInput(key);
+            if (string.IsNullOrWhiteSpace(key1)) key1 = "ANAHTAR";
+            string key2 = new string(key1.Reverse().ToArray());
+
+            string normalSquare = AlphabetTR + "X";
+            string square1 = CreateSquare(key1); // M2
+            string square2 = CreateSquare(key2); // M3
 
             StringBuilder result = new StringBuilder();
             for (int i = 0; i < text.Length; i += 2)
             {
-                int r1 = square1.IndexOf(text[i]) / 5;
-                int c2 = square1.IndexOf(text[i]) % 5;
-                int r2 = square2.IndexOf(text[i + 1]) / 5;
-                int c1 = square2.IndexOf(text[i + 1]) % 5;
+                char a = text[i];
+                char b = text[i + 1];
 
-                result.Append(AlphabetTR[Mod(r1 * 5 + c1, 29)]);
-                result.Append(AlphabetTR[Mod(r2 * 5 + c2, 29)]);
+                int indexA = square1.IndexOf(a);
+                int indexB = square2.IndexOf(b);
+                if (indexA == -1) indexA = 29;
+                if (indexB == -1) indexB = 29;
+
+                int r1 = indexA / 6; // M2 satır
+                int c2 = indexA % 6; // M2 sütun
+                int r2 = indexB / 6; // M3 satır
+                int c1 = indexB % 6; // M3 sütun
+
+                result.Append(normalSquare[r1 * 6 + c1]);
+                result.Append(normalSquare[r2 * 6 + c2]);
             }
-            return result.ToString();
+            // Şifreleme sonrası dolgu amaçlı eklenen 'X' leri temizleyebiliriz
+            return result.ToString().TrimEnd('X');
         }
         #endregion
 
@@ -485,6 +577,69 @@ namespace MainForm.Algorithms
                 result.Append(GetChar((invK[2] * c1 + invK[3] * c2) % 29));
             }
             return result.ToString();
+        }
+        #endregion
+
+        #region 10. DSA Dijital İmza
+        private static System.Security.Cryptography.DSAParameters? _dsaKeyParams = null;
+
+        public static string DSAEncrypt(string text, string key)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return text;
+            try
+            {
+                using (var dsa = System.Security.Cryptography.DSA.Create())
+                {
+                    if (_dsaKeyParams == null)
+                    {
+                        _dsaKeyParams = dsa.ExportParameters(true);
+                    }
+                    dsa.ImportParameters(_dsaKeyParams.Value);
+
+                    byte[] data = Encoding.UTF8.GetBytes(text);
+                    byte[] signature = dsa.SignData(data, System.Security.Cryptography.HashAlgorithmName.SHA256);
+
+                    return Convert.ToBase64String(signature) + "|||" + text;
+                }
+            }
+            catch (Exception ex)
+            {
+                return "HATA: DSA İMZA OLUŞTURULAMADI - " + ex.Message;
+            }
+        }
+
+        public static string DSADecrypt(string text, string key)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return text;
+            try
+            {
+                var parts = text.Split(new string[] { "|||" }, StringSplitOptions.None);
+                if (parts.Length != 2) return "HATA: GEÇERSİZ DSA VERİSİ (Format: İmza|||Metin)";
+
+                string sigBase64 = parts[0];
+                string originalText = parts[1];
+
+                using (var dsa = System.Security.Cryptography.DSA.Create())
+                {
+                    if (_dsaKeyParams == null) return "HATA: SİSTEMDE DSA ANAHTARI YOK (Önce Imzalama yapın veya uygulama baştan başladıysa anahtar sıfırlanmıştır)";
+                    
+                    dsa.ImportParameters(_dsaKeyParams.Value);
+
+                    byte[] data = Encoding.UTF8.GetBytes(originalText);
+                    byte[] signature = Convert.FromBase64String(sigBase64);
+
+                    bool isValid = dsa.VerifyData(data, signature, System.Security.Cryptography.HashAlgorithmName.SHA256);
+
+                    if (isValid)
+                        return "[DOĞRULANDI] Başarılı! Metin: " + originalText;
+                    else
+                        return "[HATA] İMZA DOĞRULANAMADI! VERİ DEĞİŞTİRİLMİŞ VEYA ANAHTAR FARKLI OLABİLİR.";
+                }
+            }
+            catch (Exception ex)
+            {
+                return "HATA: DSA ÇÖZÜMLEME HATASI - " + ex.Message;
+            }
         }
         #endregion
     }

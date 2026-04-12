@@ -27,11 +27,13 @@ namespace MainForm
         "Doğrusal",
         "Yer Değiştirme",
         "Sayı Anahtarlı",
+        "Vigenere",
         "Permütasyon",
         "Rota",
         "Zigzag",
         "4 Kare",
-        "Hill"
+        "Hill",
+        "DSA (Dijital İmza)"
     };
 
             // Şifreleme kısmındaki listeyi doldur
@@ -113,24 +115,28 @@ namespace MainForm
                     "Kaydırmalı" => CryptoAlgorithms.CaesarEncrypt(text, key),
                     "Doğrusal" => CryptoAlgorithms.AffineEncrypt(text, key),
                     "Yer Değiştirme" => CryptoAlgorithms.SubstitutionEncrypt(text, key),
-                    "Sayı Anahtarlı" => CryptoAlgorithms.VigenereEncrypt(text, key),
+                    "Sayı Anahtarlı" => CryptoAlgorithms.NumericKeyEncrypt(text, key),
+                    "Vigenere" => CryptoAlgorithms.VigenereEncrypt(text, key),
                     "Permütasyon" => CryptoAlgorithms.PermutationEncrypt(text, key),
                     "Rota" => CryptoAlgorithms.RouteEncrypt(text, key),
                     "Zigzag" => CryptoAlgorithms.RailFenceEncrypt(text, key),
                     "4 Kare" => CryptoAlgorithms.FourSquareEncrypt(text, key), // EKLEDİK
                     "Hill" => CryptoAlgorithms.HillEncrypt(text, key),         // EKLEDİK
+                    "DSA (Dijital İmza)" => CryptoAlgorithms.DSAEncrypt(text, key),
                     _ => "Algoritma seçilmedi."
                 } : algorithm switch
                 {
                     "Kaydırmalı" => CryptoAlgorithms.CaesarDecrypt(text, key),
                     "Doğrusal" => CryptoAlgorithms.AffineDecrypt(text, key),
                     "Yer Değiştirme" => CryptoAlgorithms.SubstitutionDecrypt(text, key),
-                    "Sayı Anahtarlı" => CryptoAlgorithms.VigenereDecrypt(text, key),
+                    "Sayı Anahtarlı" => CryptoAlgorithms.NumericKeyDecrypt(text, key),
+                    "Vigenere" => CryptoAlgorithms.VigenereDecrypt(text, key),
                     "Permütasyon" => CryptoAlgorithms.PermutationDecrypt(text, key),
                     "Rota" => CryptoAlgorithms.RouteDecrypt(text, key),
                     "Zigzag" => CryptoAlgorithms.RailFenceDecrypt(text, key),
                     "4 Kare" => CryptoAlgorithms.FourSquareDecrypt(text, key), // EKLEDİK
                     "Hill" => CryptoAlgorithms.HillDecrypt(text, key),         // EKLEDİK
+                    "DSA (Dijital İmza)" => CryptoAlgorithms.DSADecrypt(text, key),
                     _ => "Algoritma seçilmedi."
                 };
 
@@ -338,12 +344,14 @@ namespace MainForm
                 "Kaydırmalı" => "Örn: 3",
                 "Doğrusal" => "Örn: 5,8 (a,b)",
                 "Yer Değiştirme" => "29 harf karışık alfabe",
-                "Sayı Anahtarlı" => "Anahtar Kelime (Örn: GIZLI)",
+                "Sayı Anahtarlı" => "Sütun Sayısı (Örn: 4)",
+                "Vigenere" => "Anahtar Kelime (Örn: GIZLI)",
                 "Permütasyon" => "Örn: 3,1,0,2",
                 "Rota" => "Satır Sayısı (Örn: 5)",
                 "Zigzag" => "Hat Sayısı (Örn: 3)",
-                "4 Kare" => "İki Anahtar (Örn: ELMA,ARMUT)", 
+                "4 Kare" => "Anahtar Kelime (Örn: ELMA)", 
                 "Hill" => "4 Sayı (Örn: 3,3,2,5)",          
+                "DSA (Dijital İmza)" => "Anahtar Gerekmez",
                 _ => ""
             };
 
