@@ -21,30 +21,28 @@ namespace MainForm
 
         private void SetupInitialUI()
         {
-            // Listeye eklenecek tüm algoritmalar
+            // RSA'yı buradaki diziye ekledim, artık listede görünecek.
             string[] algoritmalar = {
-        "Kaydırmalı",
-        "Doğrusal",
-        "Yer Değiştirme",
-        "Sayı Anahtarlı",
-        "Vigenere",
-        "Permütasyon",
-        "Rota",
-        "Zigzag",
-        "4 Kare",
-        "Hill",
-        "DSA (Dijital İmza)"
-    };
+                "Kaydırmalı",
+                "Doğrusal",
+                "Yer Değiştirme",
+                "Sayı Anahtarlı",
+                "Vigenere",
+                "Permütasyon",
+                "Rota",
+                "Zigzag",
+                "4 Kare",
+                "Hill",
+                "RSA", // EKLENDİ
+                "DSA (Dijital İmza)"
+            };
 
-            // Şifreleme kısmındaki listeyi doldur
             cmbAlgoritma.Items.Clear();
             cmbAlgoritma.Items.AddRange(algoritmalar);
 
-            // Çözme kısmındaki listeyi doldur
             cmbCozAlgoritma.Items.Clear();
             cmbCozAlgoritma.Items.AddRange(algoritmalar);
 
-            // İlk sıradakini seçili getir
             cmbAlgoritma.SelectedIndex = 0;
             cmbCozAlgoritma.SelectedIndex = 0;
 
@@ -67,7 +65,7 @@ namespace MainForm
                         txtKendiSifre.Text = settings.GetValueOrDefault("Password", "");
                     }
                 }
-                catch { /* Ignore errors on load */ }
+                catch { /* Ayarlar yüklenirken hata oluşursa görmezden gel */ }
             }
         }
 
@@ -120,9 +118,10 @@ namespace MainForm
                     "Permütasyon" => CryptoAlgorithms.PermutationEncrypt(text, key),
                     "Rota" => CryptoAlgorithms.RouteEncrypt(text, key),
                     "Zigzag" => CryptoAlgorithms.RailFenceEncrypt(text, key),
-                    "4 Kare" => CryptoAlgorithms.FourSquareEncrypt(text, key), // EKLEDİK
-                    "Hill" => CryptoAlgorithms.HillEncrypt(text, key),         // EKLEDİK
-                    "DSA (Dijital İmza)" => CryptoAlgorithms.DSAEncrypt(text, key),
+                    "4 Kare" => CryptoAlgorithms.FourSquareEncrypt(text, key),
+                    "Hill" => CryptoAlgorithms.HillEncrypt(text, key),
+                    "RSA" => CryptoAlgorithms.RSAEncrypt(text), // Key gönderilmiyor
+                    "DSA (Dijital İmza)" => CryptoAlgorithms.DSAEncrypt(text), // Key gönderilmiyor
                     _ => "Algoritma seçilmedi."
                 } : algorithm switch
                 {
@@ -134,9 +133,10 @@ namespace MainForm
                     "Permütasyon" => CryptoAlgorithms.PermutationDecrypt(text, key),
                     "Rota" => CryptoAlgorithms.RouteDecrypt(text, key),
                     "Zigzag" => CryptoAlgorithms.RailFenceDecrypt(text, key),
-                    "4 Kare" => CryptoAlgorithms.FourSquareDecrypt(text, key), // EKLEDİK
-                    "Hill" => CryptoAlgorithms.HillDecrypt(text, key),         // EKLEDİK
-                    "DSA (Dijital İmza)" => CryptoAlgorithms.DSADecrypt(text, key),
+                    "4 Kare" => CryptoAlgorithms.FourSquareDecrypt(text, key),
+                    "Hill" => CryptoAlgorithms.HillDecrypt(text, key),
+                    "RSA" => CryptoAlgorithms.RSADecrypt(text), // Key gönderilmiyor
+                    "DSA (Dijital İmza)" => CryptoAlgorithms.DSADecrypt(text), // Key gönderilmiyor
                     _ => "Algoritma seçilmedi."
                 };
 
@@ -173,16 +173,12 @@ namespace MainForm
 
                 if (_incomingMessages != null && _incomingMessages.Count > 0)
                 {
-                    // Tarihe göre en yeniden eskiye sırala
                     _incomingMessages = _incomingMessages.OrderByDescending(m => m.Date).ToList();
-
-                    // Kullanıcıya mesaj seçtir
                     ShowMailSelectionDialog();
                 }
                 else
                 {
-                    MessageBox.Show("Gelen kutusunda herhangi bir mesaj bulunamadı.",
-                        "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Gelen kutusunda herhangi bir mesaj bulunamadı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
@@ -198,14 +194,11 @@ namespace MainForm
 
         private void ShowMailSelectionDialog()
         {
-            // Dinamik seçim formu oluştur
             var dialog = new Form
             {
                 Text = "Mesaj Seçin",
                 Size = new Size(900, 400),
                 StartPosition = FormStartPosition.CenterParent,
-                MinimizeBox = false,
-                MaximizeBox = false,
                 FormBorderStyle = FormBorderStyle.FixedDialog
             };
 
@@ -214,15 +207,13 @@ namespace MainForm
                 Text = $"{_incomingMessages.Count} mesaj bulundu. Çözmek istediğiniz mesajı seçin:",
                 Dock = DockStyle.Top,
                 Height = 30,
-                TextAlign = ContentAlignment.MiddleLeft,
                 Padding = new Padding(5)
             };
 
             var listBox = new ListBox
             {
                 Dock = DockStyle.Fill,
-                Font = new Font("Consolas", 9f),
-                ItemHeight = 18
+                Font = new Font("Consolas", 9f)
             };
 
             foreach (var msg in _incomingMessages)
@@ -230,8 +221,7 @@ namespace MainForm
                 listBox.Items.Add($"{msg.Date:dd.MM.yyyy HH:mm}  |  {msg.Sender}  |  {msg.Subject}");
             }
 
-            if (listBox.Items.Count > 0)
-                listBox.SelectedIndex = 0;
+            if (listBox.Items.Count > 0) listBox.SelectedIndex = 0;
 
             var btnSec = new Button
             {
@@ -240,37 +230,17 @@ namespace MainForm
                 Height = 40,
                 BackColor = Color.RoyalBlue,
                 ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 10f, FontStyle.Bold)
+                FlatStyle = FlatStyle.Flat
             };
 
             btnSec.Click += (s, ev) =>
             {
                 if (listBox.SelectedIndex < 0) return;
-
                 var selected = _incomingMessages[listBox.SelectedIndex];
-                string body = selected.Body?.Trim();
-
-                if (string.IsNullOrEmpty(body))
-                {
-                    MessageBox.Show(
-                        $"Bu mailin içeriği boş.\n\nGönderen: {selected.Sender}\nKonu: {selected.Subject}",
-                        "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                txtGelenSifre.Text = body;
+                txtGelenSifre.Text = selected.Body?.Trim();
                 dialog.Close();
-
-                MessageBox.Show(
-                    $"Şifreli mesaj yüklendi.\n\nGönderen: {selected.Sender}\nKonu: {selected.Subject}\nTarih: {selected.Date:dd.MM.yyyy HH:mm}",
-                    "Mesaj Alındı", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 tabControl1.SelectedIndex = 1;
             };
-
-            // Çift tıklayınca da seç
-            listBox.DoubleClick += (s, ev) => btnSec.PerformClick();
 
             dialog.Controls.Add(listBox);
             dialog.Controls.Add(btnSec);
@@ -290,16 +260,7 @@ namespace MainForm
 
             if (string.IsNullOrWhiteSpace(senderMail) || string.IsNullOrWhiteSpace(appPassword))
             {
-                MessageBox.Show("Lütfen önce Ayarlar sekmesinden bilgilerinizi kaydedin.",
-                    "Eksik Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                tabControl1.SelectedIndex = 2;
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(recipientEmail) || string.IsNullOrWhiteSpace(content))
-            {
-                MessageBox.Show("Alıcı adresi ve şifreli metin gereklidir.",
-                    "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lütfen önce Ayarlar sekmesinden bilgilerinizi kaydedin.", "Eksik Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -308,12 +269,10 @@ namespace MainForm
                 btnMailGonder.Text = "⌛ Gönderiliyor...";
                 btnMailGonder.Enabled = false;
 
-                // ÖDEV KURALI: Konuda asla yöntem adı veya ipucu bulunmaz.
                 string subject = "Gizli Mesaj";
                 string finalSenderName = string.IsNullOrWhiteSpace(senderName) ? "Bilinmeyen Kullanıcı" : senderName;
 
-                await _emailService.SendEncryptedEmailAsync(
-                    finalSenderName, senderMail, appPassword, recipientEmail, subject, content);
+                await _emailService.SendEncryptedEmailAsync(finalSenderName, senderMail, appPassword, recipientEmail, subject, content);
 
                 MessageBox.Show("Mesaj başarıyla gönderildi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -349,8 +308,9 @@ namespace MainForm
                 "Permütasyon" => "Örn: 3,1,0,2",
                 "Rota" => "Satır Sayısı (Örn: 5)",
                 "Zigzag" => "Hat Sayısı (Örn: 3)",
-                "4 Kare" => "Anahtar Kelime (Örn: ELMA)", 
-                "Hill" => "4 Sayı (Örn: 3,3,2,5)",          
+                "4 Kare" => "Anahtar Kelime (Örn: ELMA)",
+                "Hill" => "4 Sayı (Örn: 3,3,2,5)",
+                "RSA" => "Anahtar Gerekmez (Otomatik)",
                 "DSA (Dijital İmza)" => "Anahtar Gerekmez",
                 _ => ""
             };
@@ -362,6 +322,5 @@ namespace MainForm
         private void chkShowPass_CheckedChanged(object sender, EventArgs e)
             => txtKendiSifre.UseSystemPasswordChar = !chkShowPass.Checked;
         #endregion
-
     }
 }

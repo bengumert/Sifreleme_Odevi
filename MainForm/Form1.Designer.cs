@@ -216,7 +216,7 @@
             cmbAlgoritma.FlatStyle = FlatStyle.Flat;
             cmbAlgoritma.ForeColor = Color.White;
             cmbAlgoritma.FormattingEnabled = true;
-            cmbAlgoritma.Items.AddRange(new object[] { "Kaydırmalı", "Doğrusal", "Yer Değiştirme", "Sayı Anahtarlı", "Permütasyon", "Rota", "Zigzag" });
+            cmbAlgoritma.Items.AddRange(new object[] { "Kaydırmalı", "Doğrusal", "Yer Değiştirme", "Sayı Anahtarlı", "Permütasyon", "Rota", "Zigzag", "RSA" });
             cmbAlgoritma.Location = new Point(15, 40);
             cmbAlgoritma.Name = "cmbAlgoritma";
             cmbAlgoritma.Size = new Size(200, 25);
